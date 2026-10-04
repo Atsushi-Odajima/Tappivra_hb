@@ -1,0 +1,755 @@
+{
+  "config": {
+    "configFile": "/home/user/hanbai25/026-tappivra-app/playwright.config.ts",
+    "rootDir": "/home/user/hanbai25/026-tappivra-app/tests/e2e",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "evidence/playwright-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/home/user/hanbai25/026-tappivra-app/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "samples",
+        "name": "samples",
+        "testDir": "/home/user/hanbai25/026-tappivra-app/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "/samples\\.spec\\.ts/"
+        ],
+        "timeout": 90000
+      },
+      {
+        "outputDir": "/home/user/hanbai25/026-tappivra-app/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "editor-chromium",
+        "name": "editor-chromium",
+        "testDir": "/home/user/hanbai25/026-tappivra-app/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "/editor\\.spec\\.ts/"
+        ],
+        "timeout": 90000
+      },
+      {
+        "outputDir": "/home/user/hanbai25/026-tappivra-app/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "viewer-chromium",
+        "name": "viewer-chromium",
+        "testDir": "/home/user/hanbai25/026-tappivra-app/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "/viewer\\.spec\\.ts/"
+        ],
+        "timeout": 90000
+      },
+      {
+        "outputDir": "/home/user/hanbai25/026-tappivra-app/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "pwa-mobile-emulation",
+        "name": "pwa-mobile-emulation",
+        "testDir": "/home/user/hanbai25/026-tappivra-app/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "/pwa\\.spec\\.ts/"
+        ],
+        "timeout": 90000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.56.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "samples.spec.ts",
+      "file": "samples.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "サンプル資料からquickstart 3形式を生成",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "samples",
+              "projectName": "samples",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3778,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-04T09:37:57.172Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6a22158aed66c56e7279-7b4de224b33600eaa73c",
+          "file": "samples.spec.ts",
+          "line": 9,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "editor.spec.ts",
+      "file": "editor.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "editor (web shell, mock storage, Chromium)",
+          "file": "editor.spec.ts",
+          "line": 80,
+          "column": 6,
+          "specs": [
+            {
+              "title": "T36/T01(web) サンプル→プレビュー→3形式→file://再生→編集復元→再出力",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "editor-chromium",
+                  "projectName": "editor-chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5743,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-04T09:38:02.252Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d2f56d7d370f0ba02e91-8400e4aaa5b0e2c54381",
+              "file": "editor.spec.ts",
+              "line": 81,
+              "column": 3
+            },
+            {
+              "title": "T02/T05/T06 PNG・JPEG・WebP取り込み、黒塗り焼き込み、EXIF・ファイル名の除去",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "editor-chromium",
+                  "projectName": "editor-chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4604,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-04T09:38:08.112Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d2f56d7d370f0ba02e91-d5eb43e6bc4eaf80a3bd",
+              "file": "editor.spec.ts",
+              "line": 142,
+              "column": 3
+            },
+            {
+              "title": "T02 EXIF回転（Orientation=6）のJPEGは向きを補正して保存し、EXIFは残さない",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "editor-chromium",
+                  "projectName": "editor-chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1161,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-04T09:38:12.733Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d2f56d7d370f0ba02e91-ef48c4d6ad50d3e8cad7",
+              "file": "editor.spec.ts",
+              "line": 225,
+              "column": 3
+            },
+            {
+              "title": "T03 非対応・偽拡張子を拒否し、アプリは継続",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "editor-chromium",
+                  "projectName": "editor-chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1612,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-04T09:38:13.911Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d2f56d7d370f0ba02e91-2b7d6f3a871e5a706fb0",
+              "file": "editor.spec.ts",
+              "line": 249,
+              "column": 3
+            },
+            {
+              "title": "T25/T26 書き出し前ゲート・該当箇所へ・取消・書込失敗",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "editor-chromium",
+                  "projectName": "editor-chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2665,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-04T09:38:15.537Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d2f56d7d370f0ba02e91-0288ce8e56c948206601",
+              "file": "editor.spec.ts",
+              "line": 269,
+              "column": 3
+            },
+            {
+              "title": "T08/T17 キーボード移動・数値入力・Undo",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "editor-chromium",
+                  "projectName": "editor-chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1501,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-04T09:38:18.217Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d2f56d7d370f0ba02e91-486184647ffce177451c",
+              "file": "editor.spec.ts",
+              "line": 307,
+              "column": 3
+            },
+            {
+              "title": "T34 アクセシビリティ（axe）・レスポンシブ",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "editor-chromium",
+                  "projectName": "editor-chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4150,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-04T09:38:19.731Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d2f56d7d370f0ba02e91-6a8d59c68c51b3f7d213",
+              "file": "editor.spec.ts",
+              "line": 332,
+              "column": 3
+            },
+            {
+              "title": "ライブラリー：検索0件・削除確認・すべて削除",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "editor-chromium",
+                  "projectName": "editor-chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1575,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-04T09:38:23.898Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d2f56d7d370f0ba02e91-e1cfcf551f2d8e07186e",
+              "file": "editor.spec.ts",
+              "line": 355,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "viewer.spec.ts",
+      "file": "viewer.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "standalone HTML (file://, Chromium)",
+          "file": "viewer.spec.ts",
+          "line": 29,
+          "column": 6,
+          "specs": [
+            {
+              "title": "T07 ホットスポット位置：余白あり・幅/回転/DPR違いで誤差1px以内、代替ボタンも同じ遷移",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "viewer-chromium",
+                  "projectName": "viewer-chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2081,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-04T09:38:26.773Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "21fabc857d2aace6b217-9b027423923faf464dc8",
+              "file": "viewer.spec.ts",
+              "line": 30,
+              "column": 3
+            },
+            {
+              "title": "T07 リサイズ（回転）後に再計算",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "viewer-chromium",
+                  "projectName": "viewer-chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 260,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-04T09:38:28.975Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "21fabc857d2aace6b217-ae68148a8a302c4f69d0",
+              "file": "viewer.spec.ts",
+              "line": 73,
+              "column": 3
+            },
+            {
+              "title": "T19 タイトルの</script>・HTML・引用符・Unicode区切りは文字として表示しJSを実行しない",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "viewer-chromium",
+                  "projectName": "viewer-chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 211,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-04T09:38:29.248Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "21fabc857d2aace6b217-63e0d008a74ea7c50b20",
+              "file": "viewer.spec.ts",
+              "line": 82,
+              "column": 3
+            },
+            {
+              "title": "T20 オフライン file:// で画像・分岐・戻る、外部通信0件、fetch/module不使用",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "viewer-chromium",
+                  "projectName": "viewer-chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 980,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-04T09:38:29.473Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "21fabc857d2aace6b217-4038a019ec6e3e8173e6",
+              "file": "viewer.spec.ts",
+              "line": 108,
+              "column": 79
+            },
+            {
+              "title": "T34 閲覧HTMLのaxe・キーボード操作・reduced motion",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "viewer-chromium",
+                  "projectName": "viewer-chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1182,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-04T09:38:30.467Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "21fabc857d2aace6b217-b5e47c7e78e975bc661c",
+              "file": "viewer.spec.ts",
+              "line": 130,
+              "column": 66
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "pwa.spec.ts",
+      "file": "pwa.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "viewer PWA (Chromium mobile emulation)",
+          "file": "pwa.spec.ts",
+          "line": 24,
+          "column": 6,
+          "specs": [
+            {
+              "title": "T28(模擬) manifest・アイコン・初回2操作",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "pwa-mobile-emulation",
+                  "projectName": "pwa-mobile-emulation",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1476,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-04T09:38:32.953Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "30bf0965a0eb07fc9173-d264c3c66116a8e5ebba",
+              "file": "pwa.spec.ts",
+              "line": 25,
+              "column": 3
+            },
+            {
+              "title": "T21/T23 編集ZIP・不正ファイルを拒否、閲覧ZIPは端末内で再生",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "pwa-mobile-emulation",
+                  "projectName": "pwa-mobile-emulation",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1004,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-04T09:38:34.561Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "30bf0965a0eb07fc9173-e63764ebf8e2df7e6566",
+              "file": "pwa.spec.ts",
+              "line": 39,
+              "column": 3
+            },
+            {
+              "title": "T31/T32(模擬) 明示保存→オフライン起動→保存版の日時→削除・全削除",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "pwa-mobile-emulation",
+                  "projectName": "pwa-mobile-emulation",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1396,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-04T09:38:35.583Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "30bf0965a0eb07fc9173-0570fc2ca7b3e050f7f5",
+              "file": "pwa.spec.ts",
+              "line": 60,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-04T09:37:48.273Z",
+    "duration": 48881.526000000005,
+    "expected": 17,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

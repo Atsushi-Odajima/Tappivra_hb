@@ -1,0 +1,44 @@
+Tappivra 開発手順（PowerShell / bash 共通コマンド）
+
+■ 必要なもの（開発者のみ。購入者には不要）
+  Node.js 22 LTS（>=20.19、Vite 7要件）、npm 10以上
+  Rust stable（MSVC toolchain, x86_64-pc-windows-msvc）、Visual Studio C++ Build Tools、WebView2 Runtime
+  記録用：
+    node --version
+    npm --version
+    rustc --version
+    cargo --version
+  ※ 不足ツールの全再インストールや ExecutionPolicy の全体緩和はしないこと。
+
+■ 初回
+  npm install                 （以後は npm ci。package-lock.json で固定）
+  npx playwright install chromium   （E2E用。CIコンテナでは事前導入済みブラウザーを使用）
+
+■ 開発
+  npm run dev                 エディターWeb開発シェル http://localhost:5173（保存は明示mock・メモリーのみ）
+  npm run tauri dev           Windows本体（Rust + WebView2、ローカルDB）
+  npx vite --config vite.viewer.config.ts   閲覧PWAの開発サーバー http://localhost:5174/viewer/
+
+■ 検査
+  npm run typecheck           tsc --noEmit（strict）
+  npm run lint                ESLint
+  npm run test                Vitest（単体・RTL）
+  npm run test:e2e            Playwright（samples / editor / viewer / pwa-mobile-emulation）
+  cargo test --manifest-path src-tauri/Cargo.toml
+  cargo test --manifest-path src-tauri/Cargo.toml -- --ignored --nocapture   （T35負荷：25件/500MiB）
+
+■ ビルド・配布
+  npm run samples             アプリの実処理で samples/quickstart.* を再生成（Playwright）
+  npm run build:viewer        閲覧PWA → dist-viewer/viewer
+  npm run build               エディターWeb bundle → dist
+  npm run tauri build -- --bundles nsis    Windows 11 x64 で実行。NSISユーザー単位インストーラー
+  npm run notices             release-docs/THIRD_PARTY_NOTICES.txt を再生成
+  npm run verify:release      ファイル名・manifest・ライセンス・サンプル・出力通信・素材使用の検査＋人間確認ゲート表示
+                              （--strict でゲート残存時も失敗扱い）
+  npm run package:release     release/ 配下へ販売用ファイル一式と Tappivra_<版>_sales.zip
+
+■ 注意
+  ・署名証明書は自動購入しない。未署名版は SmartScreen 警告の可能性がある。
+  ・PWAの公開URLは実配備後に設定する。本リポジトリでは公開していない。
+  ・npm 10.9 で `npm install <pkg>` が "Cannot read properties of null (reading 'edgesOut')" で失敗する場合は
+    npx npm@11 install で lockfile を更新した（npm ci は npm 10 で動作確認済み）。

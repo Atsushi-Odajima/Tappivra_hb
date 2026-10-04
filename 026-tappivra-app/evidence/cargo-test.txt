@@ -1,0 +1,17 @@
+test store_tests::create_body_parsing ... ok
+test store_tests::atomic_write_replaces_and_leaves_no_tmp ... ok
+test store_tests::export_names_are_sanitized ... ok
+test store_tests::create_is_atomic_and_rejects_bad_asset ... ok
+test store_tests::export_record_rejects_paths ... ok
+test store_tests::delete_project_cascades_and_delete_all_requires_phrase ... ok
+test store_tests::gc_keeps_referenced_assets ... ok
+test store_tests::ownership_is_enforced ... ok
+test store_tests::revision_conflict_is_rejected ... ok
+test store_tests::uuid_validation ... ok
+test store_tests::file_db_migration_and_future_version ... ok
+test store_tests::asset_validation ... ok
+LOAD: 25 projects / 500 MiB stored (db file 501 MiB). create 13.711320562s, list 236.766µs, get 4MiB 3.988175ms, delete_all+vacuum 275.248299ms
+test store_tests::load_25_projects_500mib ... ok
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 14.54s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

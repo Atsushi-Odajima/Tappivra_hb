@@ -1,0 +1,40 @@
+# Tappivra: Windows 11 x64 向けの検査とNSISインストーラー生成（手動実行のみ）。
+# 署名・公開・出品は行わない。生成物は Actions の artifact として保存されるだけ。
+name: tappivra-windows
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: 026-tappivra-app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: 026-tappivra-app/package-lock.json
+      - uses: dtolnay/rust-toolchain@stable
+      - name: versions
+        run: |
+          node --version
+          npm --version
+          rustc --version
+          cargo --version
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run test
+      - run: cargo test --manifest-path src-tauri/Cargo.toml
+      - run: npx playwright install chromium
+      - run: npm run test:e2e
+      - run: npm run tauri build -- --bundles nsis
+      - run: npm run package:release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tappivra-release-unsigned
+          path: 026-tappivra-app/release/

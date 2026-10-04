@@ -1,0 +1,164 @@
+Tappivra（商品#026）CODEX_HANDOFF — Codex独立監修への引き継ぎ
+作成：2026-10-04（Claude Code、Linux x86_64 コンテナ）
+対象：hanbai25 リポジトリ 026-tappivra-app/（仕様の根拠は ../briefs/026_Tappivra/、無変更コピー）
+
+この文書はClaudeの自己申告です。Codexはクリーンcheckoutから同じコマンドを再実行し、結果の相違を明記してください。
+特に T05 / T18 / T19 / T20 / T22 / T29 / T33 は省略しないこと。未実施を成功に変更しないこと。
+
+============================================================
+1. 結論（完成／未完成／未検証）
+============================================================
+完成（自動試験で確認、Linux/Chromium上）
+ ・エディター画面A〜F（ライブラリー、エディター、取り込み・黒塗り、プレビュー、書き出し前チェック、データとバックアップ）
+ ・閲覧ランタイム（プレビュー／単独HTML／PWAで同一コード）、単独HTML（IIFE・CSP hash・file://・通信0）
+ ・閲覧ZIP・編集ZIP・安全なZIP読込・新UUIDでの復元
+ ・閲覧PWA（/viewer/、manifest、Service Worker、端末保存・削除）— Chromiumモバイル模擬のみ
+ ・Rust側ローカルDB（rusqlite）と限定IPC、保存ダイアログ＋tmp→rename、単一インスタンス
+   — Linuxネイティブビルドで起動・保存・書き出し・単一インスタンスを手動確認（Windowsではない）
+ ・npm scripts（01§14の全スクリプト実在）、verify:release、package:release、購入者向け説明書
+未完成
+ ・Windows NSISインストーラー（Tappivra_Setup_0.1.0_x64.exe）未生成 … Windows環境が必要
+ ・コード署名なし ・PWA実配備なし（公開URL未設定） ・Rustクレートのライセンス全文同梱なし（一覧のみ）
+未検証（NOT RUN / PARTIAL。詳細は TEST_REPORT.txt）
+ ・Windows 11実機（T01・T14〜T16・T26・T35のネイティブ部分、WebView2）
+ ・Edge／Firefox／Safari（T20は Chromium のみ）
+ ・iPhone／Android実機（T28〜T30は NOT RUN、T31/T32は模擬のみ）
+ ・200%文字拡大・スクリーンリーダー・実IMEの手動確認（T34・T08の一部）
+ ・実ディスク不足・書込権限なしのネイティブ模擬（T15）
+
+============================================================
+2. 再現コマンド（クリーンcheckoutから）
+============================================================
+ cd 026-tappivra-app
+ npm ci
+ npx playwright install chromium        # 既存ブラウザーがあれば不要
+ npm run typecheck                      # 期待：exit 0
+ npm run lint                           # 期待：exit 0
+ npm run test                           # 期待：Vitest 59 passed
+ cargo test --manifest-path src-tauri/Cargo.toml          # 期待：12 passed, 1 ignored
+ cargo test --release --manifest-path src-tauri/Cargo.toml -- --include-ignored --nocapture   # 13 passed（25件/500MiB負荷）
+ npm run test:e2e                       # 期待：17 passed（samplesプロジェクトが samples/quickstart.* を再生成する）
+ npm run build && npm run build:viewer
+ npm run verify:release                 # 期待：46 PASS / 0 FAIL / 7 GATE（ゲートは販売前の人間確認）
+ npm run package:release                # release/ 作成。インストーラーは「未同梱」と表示される
+ Windows：npm run tauri build -- --bundles nsis（未実施）
+ GitHub Actions：.github/workflows/tappivra-windows.yml（workflow_dispatch のみ。未実行）
+ Linuxでネイティブ確認する場合：webkit2gtk-4.1 等の開発パッケージ、Xvfb、dbus-run-session が必要（単一インスタンスはD-Bus必須）
+
+Claude実行結果（2026-10-04T09:34〜09:39Z）：上記すべて期待値どおり（証拠：evidence/checks.txt, e2e-run.txt,
+cargo-test.txt, verify-release.txt, playwright-results.json, screens/, native-linux/）。
+lint は初回に未使用import 1件で失敗→修正→再実行で exit 0。
+
+============================================================
+3. 要件→実装ファイル
+============================================================
+ IMPLEMENTATION_STATUS.txt の「要件と実装ファイル」を参照。主要点：
+ ・制限値の単一定義：src/domain/limits.ts（UIの文言・検証・ZIP上限が共有）
+ ・書き出し前チェック：src/domain/preflight.ts（runPreflight）。エラー時は閲覧HTML/ZIPのボタン無効、編集ZIPは可
+ ・公開変換（許可リスト）：src/export/publicDoc.ts（toDemoDocument）
+ ・HTML生成：src/export/html.ts（buildDemoHtml）＋ build/viewerRuntimePlugin.ts（esbuildでIIFE化しvirtual moduleで取り込み）
+ ・ZIP読込：src/export/zip.ts（readZipSafely：中央ディレクトリ自前解析、4KiB単位の逐次展開で申告超過を停止、CRC検証）
+ ・画像：src/media/sniff.ts（ヘッダーのみで形式・寸法、APNG/アニメWebP拒否）、process.ts（Canvas焼き込み・再エンコード）
+
+============================================================
+4. API／IPC（src-tauri/src/lib.rs。capabilities/default.json で12コマンドのみ許可）
+============================================================
+ list_projects() -> ProjectSummary[]
+ load_project(projectId) -> {revision, graphJson}
+ create_project(raw body: [u32le JSON長][{graphJson, assets:[{meta,length}]}][画像bytes...]) -> 1   … 1トランザクション
+ save_project(projectId, expectedRevision, graphJson) -> newRevision     … 不一致は "CONFLICT:"、graph内画像の所有を検査
+ put_asset(raw body=bytes, header x-tappivra-meta) -> ()                 … magic・sha256・寸法・10MiB・所有を検査
+ get_asset(projectId, assetId) -> raw bytes                              … project_id一致時のみ
+ gc_assets(projectId, keep[]) -> 件数                                     … 保存済みグラフ参照画像は常に保持
+ delete_project(projectId) / delete_all(confirmText="すべて削除")
+ storage_usage() -> {projects, bytes, location}
+ record_export(projectId, recordJson)                                    … fileNameにパス区切り・ドライブ指定を拒否
+ save_export(raw body, headers x-tappivra-kind / x-tappivra-name) -> {saved, fileName}
+     … ファイル名と拡張子を検証、保存先はRust側でOSダイアログを開いてユーザーが選択（フロントからパスを受け取らない）、
+       同じフォルダーの .<name>.<pid>.tmp に書いて sync → rename
+ 全IDはUUID形式検査。任意SQL・任意パス読取・shell・fs/http/shellプラグインなし。
+ tauri.conf.json CSP：default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'（Reactのstyle属性用）;
+   img-src 'self' blob: data:; connect-src 'self' ipc: http://ipc.localhost; object-src 'none'; base-uri 'none'
+
+============================================================
+5. DBスキーマ（src-tauri/src/store.rs、PRAGMA user_version=1）
+============================================================
+ projects(id TEXT PK, revision INTEGER CHECK>=1, graph_json TEXT, updated_at TEXT)
+ assets(id TEXT PK, project_id TEXT FK→projects ON DELETE CASCADE, sha256, mime CHECK IN (png,jpeg), width, height, data BLOB)
+ exports(id TEXT PK, project_id FK CASCADE, project_revision INTEGER, metadata_json TEXT)
+ settings(key TEXT PK, value_json TEXT)
+ PRAGMA foreign_keys=ON、journal_mode=WAL。user_version>1 は「新しいバージョンのデータです」で拒否。
+ 既存DB（0<version<現行）の移行前に <db>.v<N>.bak へコピー（現行は版1のみのため移行経路は未試験）。
+ 保存場所：Tauri app_data_dir()/tappivra.sqlite3（Windows: %APPDATA%\app.tappivra.editor\ 想定、未確認）
+
+============================================================
+6. 公開物と編集物の差分
+============================================================
+ 閲覧HTML / 閲覧ZIP（format='tappivra-demo'）に含む：新規公開UUID、productLabel、title、locale、startStepId、
+   steps[id,title,description,altText,kind,assetId,hotspots[id,label,helpText,rect,targetStepId,order]]、
+   assets[id,path,mime,width,height,byteLength,sha256]、theme.accentHex、generatedAt、加工済み画像のみ
+ 含まない：privateNotes、project.id・description・revision・作成日時、ExportRecord、履歴、元画像、元ファイル名、パス、EXIF
+ 編集ZIP（format='tappivra-project', containsPrivateNotes=true）：graph全体（privateNotes含む）＋加工済み画像。元画像は含まない。
+ 閲覧ZIPの中身は manifest.json / HOW_TO_OPEN.txt / media/<uuid>.(png|jpg) のみ（verify:releaseで検査）。
+
+============================================================
+7. 既知の不具合・制約
+============================================================
+ K1 Linuxで D-Busセッションが無いと単一インスタンスプラグインが働かず、2つ目の起動が終了しない（Windows挙動は未確認）。
+ K2 書き出しの「取消」は保存ダイアログ表示中は押せない（OSダイアログの「キャンセル」で取り消す）。
+ K3 取り込み画面の黒塗りはポインター操作のみ。キーボードだけで黒塗り矩形を置く手段がない（アクセシビリティ上の課題）。
+ K4 キャンバス上のドラッグで新規クリック箇所を描く機能はない（「クリック箇所を追加」→移動・四隅でサイズ変更）。
+ K5 revision競合時はライブラリーへ戻って読み込み直す方式（差分マージなし）。
+ K6 孤立画像の整理はプロジェクトを開く時と「戻る」時のみ。
+ K7 納品素材 pwa_maskable_512.png が pwa_icon_512.png と同一bytes（素材側の事実。そのまま使用、verify:releaseでGATE表示）。
+ K8 書体はOSフォント（Windowsでは通常 Yu Gothic UI 等にフォールバック。Inter/Noto Sans JPが無い環境あり）。
+ K9 Web開発シェル（npm run dev）の保存はメモリーのみのmock。画面上部に明示。E2Eの保存系試験はこのmock上の結果。
+ K10 THIRD_PARTY_NOTICES のRust部はクレート名・版・ライセンス識別子の一覧のみ。
+
+============================================================
+8. セキュリティ残課題（Codexで重点再確認してほしい点）
+============================================================
+ S1 黒塗り：Canvas描画後に不透明黒で塗り再エンコード。外側丸め（maskPixels）。JPEG出力の黒領域はブロックノイズで
+    完全な0にならない可能性（PNGで最大値0を確認、JPEGの黒塗りは未計測）。Windows WebView2での同等性は未確認。
+ S2 HTML：JSONは <,>,&,U+2028/2029 をエスケープし type=application/json に格納、ユーザー文字列はtextContentのみ
+    （ESLintで innerHTML 禁止）。CSPは meta で script/style を sha256 固定、connect-src 'none'。file://でのCSP有効性は
+    Chromiumのみ確認。
+ S3 ZIP：パス検査・symlink・重複（大文字小文字・NFC正規化）・ZIP64/暗号化/分割拒否・圧縮比100・解凍後100MiB・
+    100エントリー・JSON深度10/文字列4000。data descriptor付きZIPは中央ディレクトリ値で処理（ローカルヘッダー値は不使用）。
+ S4 IPC：UUID・所有・revision検査はRust側でも実施。フロントJSを改変された場合でもDB外のパスには書けない設計
+    （保存先はOSダイアログ由来のみ）。実際の改ざん試験は未実施。
+ S5 PWA：ZIP内HTML/JSは読まない・実行しない。IndexedDBには検証済みZIPのbytesのみ、開く度に再検証。
+    Service Workerは同一オリジンGETのみ応答、閲覧データはキャッシュしない（サンプルZIPのみ同梱）。
+ S6 暗号化なし：DBは平文。共有アカウント・盗難からの保護はない（説明書に明記）。
+ S7 npm audit 0件（2026-10-04時点）。cargo audit は未実施。
+
+============================================================
+9. 成果物パス（このリポジトリに実在）
+============================================================
+ 026-tappivra-app/samples/quickstart.html, quickstart.tappivra-demo.zip, quickstart.tappivra-project.zip
+   … npm run samples（Playwrightで実アプリを操作）により架空サンプル資料から生成
+ 026-tappivra-app/release-docs/*.txt（はじめに・使い方・スマホで見る・バックアップと削除・対応環境と制限・LICENSE案・
+   THIRD_PARTY_NOTICES・VERSION・静的ビューアー配信手順）
+ 026-tappivra-app/evidence/（試験ログ・スクリーンショット・Linuxネイティブ確認）
+ release/ はgit管理外（npm run package:release で再生成）。build日時：2026-10-04T09:38Z（Linux、未署名、インストーラーなし）
+
+============================================================
+10. 販売前の残条件（すべて人間の確認・承認が必要）
+============================================================
+ 1. Windows 11 x64（クリーン環境・Nodeなし）で NSIS インストーラーを生成し、インストール→起動→サンプル→
+    画像5枚→黒塗り→分岐→3形式→別PCで再生→編集復元→アンインストール時のデータ扱い、を実機確認（T01/T35/T36）。
+ 2. WebView2が無い環境でのインストーラー挙動（downloadBootstrapper：通信必要）を確認し説明書を確定。
+ 3. コード署名方針の決定（未署名ならSmartScreen警告を購入者案内に明記。証明書の購入は別承認）。
+ 4. 閲覧PWAを販売者のHTTPS静的配信へ配備（release-docs/静的ビューアー配信手順.txt）し、iPhone Safari・
+    Android Chromeの実機で T28〜T32 を実施。実URLをスマホで見る.txtへ記載。未配備のまま販売しない。
+ 5. Edge・Firefox で file:// 再生（T20）、可能ならmacOS Safari。
+ 6. 200%文字拡大・スクリーンリーダー（NVDA/VoiceOver）・実IMEでの操作確認（T34/T08）。
+ 7. 利用許諾文（LICENSE.txt案）・特定商取引法表示等の法的確認、商標・名称の調査（02の仮説を事実扱いしない）。
+ 8. Rustクレートのライセンス全文の同梱（cargo-about等）と cargo audit。
+ 9. 対象者5人による有償前テスト（00_product_summary.txt「販売前の確認」）。価格・需要は仮説のまま。
+
+インフラ：購入者側は不要。販売者側は静的ホスティング（PWA）とドメインのみ。サーバー処理・DB・API・解析は無し。
+運用費：静的ホスティング・ドメイン・（任意）署名証明書・販売手数料。本納品では一切契約していない。
+購入後手順：ZIPダウンロード→インストーラー実行→サンプルで試す→自分の画像へ差し替え（はじめに.txt）。
+
+[CODEX_HANDOFF 終了：Tappivra 0.1.0]

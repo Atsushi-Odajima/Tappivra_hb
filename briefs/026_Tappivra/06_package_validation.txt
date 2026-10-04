@@ -1,0 +1,52 @@
+商品 #026 Tappivra — 納品ファイルの検証結果
+検証日：2026-10-04
+対象：今回の企画・仕様・ブランド素材セット。商品のソフトウェアは未実装。
+
+実施済み：
+・必要な基本TXT、素材、テスト資料、サンプルの存在を確認。
+・全TXTをUTF-8で読み直し、NUL/置換文字なしを確認。
+・完全版プロンプトは378行、30,191 bytes。16セクションと終了行を確認。
+・全PNGをPillowでverifyし、画像として開けることを確認。
+・横長ロゴ、暗背景ロゴ、マークの透過アルファと余白を確認。
+・PWA 192/512、maskable 512、Apple 180の寸法を確認。
+・SVGをXML解析し、パス形状であること、ラスター埋込/フォント依存がないことを確認。
+・maskableアイコンの可視形状の最大中心距離180.3px < 204.8pxを確認。
+・ブランドボードの彩色ピクセル率（RGB差>35の簡易基準）は約0.18%。白黒主体を確認。
+・本文色/白のコントラスト 17.94:1、補助 5.96:1、青 5.17:1を計算。
+  これは色トークンの計算であり、アプリ全体のアクセシビリティ合格ではない。
+・ブランドボードと単体ロゴは同じSVG由来のPNGを使用。
+・ブランドボード、単体ロゴ、UI見本を目視確認。文字の大きな欠け・不整合なし。
+・サンプルJSONの参照画像hashと遷移先、座標範囲を確認。
+・フォント本体、EXE、DLL、MSIが混入していないことを確認。
+
+納品処理：
+・checksums.sha256に自己を除く同梱ファイルhashを記録。
+・ZIP CRCテストと安全な一時フォルダへの解凍を実行。
+・解凍物の全ファイルbytesを作成元と比較。
+・公開する単体TXTがZIP内完全版と同一であることを確認。
+
+未実施：
+Tappivra本体の実装、ビルド、Windows/iPhone/Android実機、公開HTML実行、アプリの安全性試験。
+市場の有償利用検証、商標の正式調査、PWA公開、署名証明書購入。
+T01〜T36の製品テスト合格をこの資料検証から推定しない。
+
+画像一覧（幅×高さ）：
+assets/brand_board.png  1600x1360  RGB
+assets/pwa_icon_512.png  512x512  RGB
+assets/logo_horizontal.png  1264x320  RGBA
+assets/ui_mobile.png  780x1688  RGB
+assets/pwa_icon_192.png  192x192  RGB
+assets/apple_touch_icon.png  180x180  RGB
+assets/brand_assets_preview.png  1100x210  RGB
+assets/ui_editor.png  1440x920  RGB
+assets/logo_mark.png  384x384  RGBA
+assets/pwa_maskable_512.png  512x512  RGB
+assets/logo_horizontal_dark.png  1264x320  RGBA
+assets/favicon_32.png  32x32  RGBA
+samples/screen_05.png  1440x900  RGB
+samples/screen_03.png  1440x900  RGB
+samples/screen_02.png  1440x900  RGB
+samples/screen_01.png  1440x900  RGB
+samples/screen_04.png  1440x900  RGB
+
+[パッケージ検証終了：Tappivra / 1.0]

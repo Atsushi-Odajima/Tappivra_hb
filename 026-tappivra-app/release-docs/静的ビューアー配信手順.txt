@@ -1,0 +1,15 @@
+Tappivra Viewer 静的配信手順（販売者が実施。購入者は設定不要）
+
+1. Tappivra_Viewer_static_<版>.zip を展開すると viewer/ フォルダーがあります。
+2. HTTPSで配信できる静的ホスティングの「/viewer/」に viewer/ の中身を配置します。
+   （例：https://<販売者ドメイン>/viewer/index.html）。サーバー側処理・データベースは不要です。
+3. 配信設定：
+   ・sw.js と index.html はキャッシュを短く（例：no-cache）。assets/ 配下は長期キャッシュ可。
+   ・manifest.webmanifest は Content-Type: application/manifest+json。
+   ・HTTPS必須（Service Worker・ホーム画面追加のため）。
+4. 配備後、iPhone Safari・Android Chromeの実機で以下を確認してから購入者に案内します：
+   初回表示、閲覧ZIPの選択、分岐・戻る・目次、この端末へ保存、機内モードでの再表示、削除、ホーム画面追加の名前とアイコン。
+5. 実際のURLをスマホで見る.txt と販売ページに記載します。未配備のURLを利用可能として案内しないでください。
+
+費用：静的ホスティング・ドメインの費用は販売者負担です（本納品では契約・公開を行っていません）。
+アクセス解析・広告タグは追加しないでください（閲覧データは送信しない設計です）。

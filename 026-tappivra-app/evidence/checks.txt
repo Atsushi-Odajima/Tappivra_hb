@@ -1,0 +1,54 @@
+=== npm run typecheck (2026-10-04T09:34:22Z)
+> tappivra@0.1.0 typecheck
+> tsc --noEmit -p tsconfig.json
+exit=0
+=== npm run lint (2026-10-04T09:34:28Z) — 初回1件（未使用import）を修正後に再実行
+> tappivra@0.1.0 lint
+> eslint .
+/home/user/hanbai25/026-tappivra-app/src/export/export.test.ts
+
+
+exit=0 (再実行)
+=== npm run test (2026-10-04T09:34:31Z)
+> tappivra@0.1.0 test
+> vitest run
+ RUN  v4.1.11 /home/user/hanbai25/026-tappivra-app
+ Test Files  6 passed (6)
+      Tests  59 passed (59)
+   Start at  09:34:31
+   Duration  4.79s (transform 1.28s, setup 1.25s, import 1.76s, tests 3.75s, environment 3.16s)
+exit=0
+=== cargo test --manifest-path src-tauri/Cargo.toml (2026-10-04T09:34:36Z)
+test store_tests::asset_validation ... ok
+test result: ok. 12 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.74s
+     Running unittests src/main.rs (src-tauri/target/debug/deps/tappivra-74a0a65aba577b7a)
+running 0 tests
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+   Doc-tests tappivra_lib
+running 0 tests
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+exit=0
+=== npm run build (2026-10-04T09:34:46Z)
+node_modules/zod/v4/core/regexes.js (74:0): A comment
+✓ 160 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.46 kB │ gzip:   0.30 kB
+dist/assets/index-CfgKBOYE.css   15.10 kB │ gzip:   3.66 kB
+dist/assets/index-BBHqsDnU.js   435.77 kB │ gzip: 138.20 kB
+✓ built in 4.02s
+exit=0
+=== npm run build:viewer (2026-10-04T09:34:51Z)
+../../dist-viewer/viewer/sw.js                                   1.15 kB
+../../dist-viewer/viewer/brand/pwa_icon_512.png                  2.81 kB
+../../dist-viewer/viewer/brand/pwa_maskable_512.png              2.81 kB
+../../dist-viewer/viewer/brand/logo_horizontal.svg               5.21 kB │ gzip:   1.66 kB
+../../dist-viewer/viewer/samples/quickstart.tappivra-demo.zip  425.16 kB
+../../dist-viewer/viewer/assets/index-B1YW_qSh.css               6.52 kB │ gzip:   1.80 kB
+../../dist-viewer/viewer/assets/index-COZQ09pb.js              345.98 kB │ gzip: 108.14 kB
+✓ built in 3.75s
+exit=0
+=== npm run lint 再実行 (2026-10-04T09:35:12Z)
+exit=0
+=== npm run test 再実行
+      Tests  59 passed (59)

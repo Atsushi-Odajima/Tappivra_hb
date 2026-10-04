@@ -1,0 +1,70 @@
+Tappivra TEST_REPORT（T01〜T36）
+実施日：2026-10-04 / 実施者：Claude Code（自己検証。Codex独立再現は未実施）
+
+結果の区分（04仕様のPASS/FAIL/BLOCKED/NOT RUNに加え、内訳を明示）：
+  PASS     … 記載環境で期待値どおり
+  PASS(C)  … Chromium/Linuxでのみ PASS。Windows WebView2・他ブラウザーは NOT RUN
+  PARTIAL  … 項目の一部が PASS、残りは NOT RUN（残りを本文に明記）
+  NOT RUN  … 未実施　　BLOCKED / FAIL … 該当なし
+※ PARTIAL・NOT RUN は「未検証」として扱うこと。PASSでもWindows実機・iPhone/Android実機の合格ではない。
+
+■ 実行環境
+  ENV-L : Linux x86_64 コンテナ（Ubuntu 24.04.4 LTS）、Node v22.22.0、npm 10.9.4、rustc/cargo 1.97.0
+  ENV-W : 上記上の Web開発シェル（vite dev、保存は明示mock）＋ Playwright 1.56.1 / Chromium 141.0.7390.37
+  ENV-N : 上記上の Tauri 2.12.1 Linuxリリースビルド（WebKitGTK 2.52.6、Xvfb、D-Busセッション）。Windowsではない。
+  ENV-PWA: vite preview の /viewer/（静的ビルド）＋ Chromium「Pixel 7」モバイル模擬。実機ではない。
+  未使用：Windows 11、Edge/WebView2、Firefox、WebKit/Safari、iPhone、Android、macOS。
+
+■ コマンドと全体結果（証拠：evidence/checks.txt, evidence/e2e-run.txt, evidence/cargo-test.txt, evidence/playwright-results.json）
+  npm run typecheck                                   exit 0
+  npm run lint                                        exit 0（初回1件の未使用importを修正後）
+  npm run test (vitest)                               59 passed
+  cargo test --manifest-path src-tauri/Cargo.toml     12 passed（1 ignored＝負荷試験）
+  cargo test --release ... -- --include-ignored       13 passed（負荷試験含む）
+  npm run test:e2e (Playwright)                       17 passed（samples 1 / editor 8 / viewer 5 / pwa-mobile-emulation 3）
+  npm run build / npm run build:viewer                exit 0
+  npx tauri build --no-bundle (Linux)                 exit 0、警告0（src-tauri/target/release/tappivra）
+  npm run tauri build -- --bundles nsis               NOT RUN（Windowsが必要）
+
+■ 個別結果
+ID  | 結果     | 環境        | コマンド/試験                                   | 期待値と実測 | 証拠
+T01 | PARTIAL  | ENV-W,ENV-N | e2e editor「T36/T01(web)」, Xvfb手動            | 期待：クリーンWin11にインストール→起動→空状態→サンプル。実測：Linuxネイティブで起動→空状態→「サンプルで試す」でDBに5ステップ・5画像登録。Web版でも同様。NSISインストール・Nodeなし環境・WebView2取得は未確認 | evidence/native-linux/linux-window.png, linux-sample-editor.png, evidence/screens/A-library-empty.png
+T02 | PASS(C)  | ENV-W       | e2e「T02/T05/T06」「T02 EXIF回転」               | PNG→PNG 400x250、JPEG→JPEG 300x200、WebP→PNG 300x200、EXIF Orientation=6 のJPEG 300x200→保存200x300（向き補正）・EXIF除去を確認。Windows WebView2 未確認 | tests/e2e/editor.spec.ts
+T03 | PASS     | ENV-W,ENV-L | e2e「T03」, sniff.test.ts                       | GIF/SVG/HEIC/PDF/PNG名のHTML/不正バイト/APNG/アニメWebPを拒否、アプリ継続。Rust側もmagic/sha不一致を拒否 | src/media/sniff.test.ts, src-tauri/src/store_tests.rs
+T04 | PASS     | ENV-L       | sniff.test.ts                                   | 10MiBちょうど可・+1byte拒否、16MP可・+1px拒否（ヘッダーのみで判定）、合計80MiB超拒否。UIと検証は同じ定数（src/domain/limits.ts） | src/media/sniff.test.ts
+T05 | PASS(C)  | ENV-W       | e2e「T02/T05/T06」                               | 緑の識別パターンを黒塗り→保存画像の同領域の最大値0（全画素黒）、領域外は保持。保存/出力物に元画像hash・元IDATなし。*Chromiumのみ。Windows WebView2未確認 | tests/e2e/editor.spec.ts
+T06 | PASS(C)  | ENV-W       | 同上                                             | EXIF内マーカー・元ファイル名（パス風文字列）がDB画像・HTML・閲覧ZIP・編集ZIPに残らない。*Chromiumのみ | 同上
+T07 | PASS(C)  | ENV-W       | e2e viewer「T07」2件, domain.test.ts             | 余白あり（72vh制限）・360/390/430/768/1024/1280幅・縦横回転・DPR1〜3で誤差≤1px、リサイズで再計算。*ブラウザーズーム50/150%の実操作は未試験（DPR模擬のみ） | evidence/screens/G-html-390.png
+T08 | PASS     | ENV-W,ENV-L | e2e「T08/T17」, domain.test.ts                   | NaN/Infinity/負/0幅/はみ出しを拒否しエラー表示、矢印0.5%・Shift2%。IME中無効はコード上isComposing判定のみ（実IME未試験→その部分PARTIAL） | 同上
+T09 | PASS     | ENV-L       | domain.test.ts                                  | 並べ替えでID・リンク不変、複製は新ID、共有画像は参照数で削除判定 | src/domain/domain.test.ts
+T10 | PASS     | ENV-L       | domain.test.ts, UI(StepPanel)                    | 入リンク数を表示、開始点削除は代替必須、参照切れは無断修正せず出力停止 | 同上
+T11 | PASS     | ENV-L       | domain.test.ts                                  | 自己リンク・2点循環・5点循環検知、分岐合流DAG許可、UIで循環先は選択不可 | 同上
+T12 | PASS     | ENV-L       | domain.test.ts                                  | 未到達・finish不到達を検知、5ステップサンプル合格 | 同上
+T13 | PASS     | ENV-L       | domain.test.ts                                  | 差し替えでhash確認・領域確認を無効化、確認前は出力不可、確認後合格 | 同上
+T14 | PASS(C)  | ENV-L,ENV-N | editor.test.tsx, Xvfb手動                        | 800ms後に保存、コミット完了前は「保存中…」、revision不一致は上書き拒否（Rust/mock両方）。ネイティブでrevision 1→2をDBで確認。*Windows未確認 | src/editor/editor.test.tsx, evidence/native-linux/autosave.txt
+T15 | PARTIAL  | ENV-L       | editor.test.tsx（mock失敗注入）, store_tests     | 書込失敗で「もう一度保存」導線、直前の正常データ保持、再試行成功。実ディスク不足・権限なしのネイティブ模擬は未実施 | 同上
+T16 | PARTIAL  | ENV-N       | Xvfb＋dbus-run-sessionで2回起動                  | Linuxで2つ目は0.08秒で終了、プロセスは常に1。Windows（名前付きミューテックス方式）は未確認。D-Busなし環境では2つ目が終了しなかった（Linux固有、記録のみ） | evidence/native-linux/single-instance.txt
+T17 | PASS     | ENV-L,ENV-W | domain.test.ts, e2e「T08/T17」                   | 追加・移動・削除の戻す/やり直し、上限50件。未加工画像は履歴に入らない（履歴はグラフのみ） | 同上
+T18 | PASS     | ENV-L,ENV-W | export.test.ts, e2e「T36」, verify:release       | 内部メモ識別文字列がHTML/閲覧ZIPに無く編集ZIPにのみ存在 | evidence/verify-release.txt
+T19 | PASS(C)  | ENV-L,ENV-W | export.test.ts, e2e viewer「T19」                | </script><img onerror>・引用符・U+2028/2029を文字表示、JS未実行・ダイアログ0・CSP違反0。*Chromiumのみ | tests/e2e/viewer.spec.ts
+T20 | PARTIAL  | ENV-W       | e2e「T36」「T20」                                 | Chromiumでfile://・オフライン・分岐・戻る・外部通信0件、module/fetchなし。Edge/Firefox・別PC（クリーンPC）は未実施 | 同上
+T21 | PASS(C)  | ENV-L,ENV-PWA| export.test.ts, e2e pwa「T21/T23」              | 3形式のformat区別、PWAは編集ZIPを拒否、復元は閲覧ZIPを拒否 | tests/e2e/pwa.spec.ts
+T22 | PASS     | ENV-L       | export.test.ts                                  | ../・絶対・drive・\\・NUL・重複・symlink・深度超・圧縮比bomb・申告偽装bomb（展開中停止）・容量・エントリー数を拒否 | src/export/export.test.ts
+T23 | PASS     | ENV-L,ENV-PWA| export.test.ts, e2e pwa                         | CRC不一致・sha不一致・画像不正・必須キー欠損・schemaVersion=999・非ZIPを拒否（DB未来版もRustで拒否） | 同上
+T24 | PASS(C)  | ENV-L,ENV-W | export.test.ts, e2e「T36」                       | 新UUIDで復元、既存非上書き、ステップ順・hash・リンク・説明一致、再出力一致。*ネイティブDBへの復元はLinuxでも未操作 | 同上
+T25 | PASS     | ENV-L,ENV-W | domain.test.ts, e2e「T25/T26」                   | 未確認画像・alt不足・リンク切れ・25MiB超は不可、20MiB超警告、該当箇所へ移動、修正→合格 | evidence/screens/E-export-errors.png
+T26 | PARTIAL  | ENV-W,ENV-N,ENV-L | e2e「T25/T26」, store_tests, Xvfb         | 取消・書込失敗で成功表示なし（mock）、tmp→rename（Rust試験＋Linuxネイティブ保存でtmp残存なし）、snapshot固定（ダイアログ表示中は編集不可）。保存ダイアログ表示中の取消ボタンは無効（OSダイアログのキャンセルで代替） | evidence/native-linux/n4.png
+T27 | PASS     | ENV-L,ENV-W | runtime.test.ts, e2e                            | 分岐→戻る→別枝→最初から、タイトルフォーカス、aria-live、外部CTAなし | src/viewer/runtime.test.ts
+T28 | NOT RUN  | —           | —                                               | 販売者の実HTTPS環境が未配備。manifest・アイコン・初回2操作はENV-PWAで確認済み（模擬）。ホーム画面追加は未確認 | tests/e2e/pwa.spec.ts（参考）
+T29 | NOT RUN  | —           | —                                               | iPhone実機なし。Chromium模擬で44pxボタン・戻るを確認したが実機合格の代替にしない | —
+T30 | NOT RUN  | —           | —                                               | Android実機なし | —
+T31 | PARTIAL  | ENV-PWA     | e2e pwa「T31/T32」                               | 明示保存前は永続化なし、保存後オフライン（SW）で起動・閲覧、永久保証しない文言。容量不足/拒否の実発生は未試験（catchでセッション閲覧へ） | evidence/screens/G-pwa-*.png
+T32 | PARTIAL  | ENV-PWA     | 同上                                             | 個別削除・全削除・保存版日時表示を確認。SW更新時に強制リロードしない（コード確認のみ、更新シナリオ未試験） | 同上
+T33 | PARTIAL  | ENV-L       | store_tests, verify:release, コードレビュー       | UUID/所有検査・任意パス不可（ファイル名検証・保存先はRustダイアログ）・SQL/shell/fs/httpプラグインなし・capabilitiesはアプリ12コマンドのみ・ビルド成果物に解析/外部URLなし。ネイティブ実行時の通信監視（パケットキャプチャ）は未実施 | evidence/verify-release.txt
+T34 | PARTIAL  | ENV-W,ENV-PWA| e2e axe×5画面、キーボード、reduced motion       | axe違反0（ライブラリー/エディター/書き出し/閲覧HTML/PWA）、Tab/Enter/Escape、reduced motionで遷移0s。200%文字拡大・スクリーンリーダー・手動コントラスト確認は未実施 | tests/e2e/*.spec.ts
+T35 | PARTIAL  | ENV-L       | load.test.ts, cargo test --ignored              | 30step/290hotspot：検査3.6ms・変換+ZIP+再検証74ms。25件/500MiB：登録13.7s、一覧0.24ms、4MiB取得4ms、全削除+VACUUM0.28s（Linux/tmpfsでない通常ディスク）。RAM計測・NSIS生成・再インストール・WebView2不足環境・アンインストール・署名は未実施 | evidence/cargo-test.txt
+T36 | PARTIAL  | ENV-W       | e2e「T36/T01(web)」, samples                     | 5画像→分岐→（黒塗り：別試験T05）→保存→3形式→file://再生→編集復元→再出力一致をChromiumで確認。別環境（別PC）再生・Codexのクリーンcheckout再現は未実施 | evidence/e2e-run.txt
+
+■ 未実施の主な理由
+  ・Windows 11・iPhone・Android の実機がこの作業環境にない。
+  ・PWAの公開・署名証明書の購入・外部登録は承認外（指示により禁止）。

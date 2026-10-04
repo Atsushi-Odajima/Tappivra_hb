@@ -1,0 +1,28 @@
+:root { --tv-canvas: #ffffff; --tv-page: #f7f8fa; --tv-ink: #15171b; --tv-muted: #5d6470; --tv-border: #dde1e7; --tv-border-strong: #a7afbb; --tv-accent: #2563eb; --tv-accent-soft: #dff3fc; }
+html, body, #root { margin: 0; min-height: 100%; background: #ffffff; }
+body { font-family: Inter, 'Noto Sans JP', 'Hiragino Sans', 'Yu Gothic UI', Meiryo, system-ui, sans-serif; color: #15171b; font-size: 16px; line-height: 1.6; -webkit-text-size-adjust: 100%; }
+* { box-sizing: border-box; }
+.pwa-header { border-bottom: 1px solid #dde1e7; padding: 12px 16px; padding-top: max(12px, env(safe-area-inset-top)); }
+.pwa-logo { display: block; width: 160px; height: auto; }
+.pwa-main { max-width: 1100px; margin: 0 auto; padding: 24px 16px max(24px, env(safe-area-inset-bottom)); display: grid; gap: 16px; }
+.pwa-h1 { font-size: 24px; font-weight: 600; line-height: 1.35; margin: 0; }
+.pwa-h2 { font-size: 16px; font-weight: 600; margin: 0 0 8px; }
+.pwa-muted { color: #5d6470; margin: 0; }
+.pwa-small { color: #5d6470; font-size: 14px; margin: 0; }
+.pwa-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.pwa-file { display: flex; align-items: center; justify-content: center; position: relative; }
+.pwa-file:focus-within { outline: 2px solid #2563eb; outline-offset: 2px; }
+.pwa-error { color: #b42318; background: #fef3f2; border: 1px solid #f1c4bf; border-radius: 8px; padding: 12px; margin: 0; }
+.pwa-warn { border: 1px solid #e7d3b0; border-radius: 8px; padding: 12px; display: grid; gap: 12px; color: #8c5a13; }
+.pwa-busy { display: flex; gap: 12px; align-items: center; justify-content: space-between; }
+.pwa-saved, .pwa-help { border-top: 1px solid #dde1e7; padding-top: 16px; display: grid; gap: 8px; }
+.pwa-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.pwa-item { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: stretch; }
+.pwa-open { font: inherit; text-align: left; min-height: 44px; padding: 8px 12px; border: 1px solid #dde1e7; border-radius: 8px; background: #fff; color: #15171b; display: grid; cursor: pointer; }
+.pwa-open:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+.pwa-item-title { font-weight: 600; overflow-wrap: anywhere; }
+.pwa-danger { color: #b42318; justify-self: start; }
+.pwa-save { max-width: 1100px; margin: 0 auto; padding: 8px 16px 0; display: grid; gap: 4px; }
+.pwa-demo-bar { max-width: 1100px; margin: 0 auto; padding: 8px 16px; padding-top: max(8px, env(safe-area-inset-top)); display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap; border-bottom: 1px solid #dde1e7; }
+.pwa-demo-bar .pwa-logo { width: 120px; }
+input[type='file'] { font-size: 16px; }

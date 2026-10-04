@@ -1,0 +1,10 @@
+node_modules/
+dist/
+dist-viewer/
+release/
+test-results/
+playwright-report/
+evidence/tmp/
+src-tauri/target/
+src-tauri/gen/
+*.log

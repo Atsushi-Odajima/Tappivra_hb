@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-gc-assets"
+description = "Enables the gc_assets command without any pre-configured scope."
+commands.allow = ["gc_assets"]
+
+[[permission]]
+identifier = "deny-gc-assets"
+description = "Denies the gc_assets command without any pre-configured scope."
+commands.deny = ["gc_assets"]

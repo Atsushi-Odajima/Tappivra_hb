@@ -1,0 +1,67 @@
+/* Tappivra 閲覧ランタイム。03仕様の色トークン。外部フォント読込なし（OSフォント）。 */
+.tv-viewer {
+  --tv-canvas: #ffffff;
+  --tv-page: #f7f8fa;
+  --tv-ink: #15171b;
+  --tv-muted: #5d6470;
+  --tv-border: #dde1e7;
+  --tv-border-strong: #a7afbb;
+  --tv-accent: #2563eb;
+  --tv-accent-soft: #dff3fc;
+  font-family: Inter, 'Noto Sans JP', 'Yu Gothic UI', 'Hiragino Sans', Meiryo, system-ui, sans-serif;
+  color: var(--tv-ink);
+  background: var(--tv-canvas);
+  font-size: 16px;
+  line-height: 1.6;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  -webkit-text-size-adjust: 100%;
+}
+.tv-viewer *, .tv-viewer *::before, .tv-viewer *::after { box-sizing: border-box; }
+.tv-visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.tv-header { border-bottom: 1px solid var(--tv-border); background: var(--tv-canvas); }
+.tv-header-inner { max-width: 1100px; margin: 0 auto; padding: 12px 16px; display: flex; align-items: center; gap: 16px; justify-content: space-between; }
+.tv-header-titles { min-width: 0; }
+.tv-product { margin: 0; font-size: 12px; color: var(--tv-muted); }
+.tv-title { margin: 0; font-size: 20px; font-weight: 600; line-height: 1.35; overflow-wrap: anywhere; }
+.tv-main { width: 100%; max-width: 1100px; margin: 0 auto; padding: 16px 16px 24px; flex: 1; }
+.tv-step-title { margin: 0 0 12px; font-size: 16px; font-weight: 600; color: var(--tv-muted); font-variant-numeric: tabular-nums; }
+.tv-step-title:focus { outline: none; }
+.tv-step-title:focus-visible { outline: 2px solid var(--tv-accent); outline-offset: 2px; }
+.tv-stage { position: relative; width: 100%; max-height: 72vh; background: var(--tv-page); border: 1px solid var(--tv-border); }
+.tv-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; display: block; user-select: none; }
+.tv-hotspots { position: absolute; inset: 0; }
+.tv-hotspot { position: absolute; margin: 0; padding: 0; background: transparent; border: 2px solid var(--tv-accent); border-radius: 4px; cursor: pointer; transition: background-color 120ms; }
+.tv-hotspot:hover { background: rgba(37, 99, 235, 0.1); }
+.tv-hotspot:focus-visible { outline: 2px solid var(--tv-accent); outline-offset: 2px; background: rgba(37, 99, 235, 0.12); }
+.tv-desc { margin: 16px 0 0; font-size: 16px; overflow-wrap: anywhere; white-space: pre-wrap; }
+.tv-actions { margin-top: 16px; display: grid; gap: 12px; }
+.tv-action { display: grid; gap: 4px; }
+.tv-help { margin: 0; font-size: 14px; color: var(--tv-muted); overflow-wrap: anywhere; }
+.tv-finish-text { margin: 0 0 4px; font-weight: 600; }
+.tv-note { margin: 24px 0 0; color: var(--tv-muted); font-size: 14px; }
+.tv-trail { margin: 8px 0 0; color: var(--tv-muted); font-size: 12px; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.tv-btn { font: inherit; min-height: 44px; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; line-height: 1.4; overflow-wrap: anywhere; transition: background-color 120ms; }
+.tv-btn:focus-visible, .tv-toc-item:focus-visible { outline: 2px solid var(--tv-accent); outline-offset: 2px; }
+.tv-btn-primary { background: var(--tv-ink); color: #fff; border: 1px solid var(--tv-ink); }
+.tv-btn-primary:hover { background: #2c3037; }
+.tv-btn-primary:active { background: #060708; }
+.tv-btn-secondary { background: var(--tv-canvas); color: var(--tv-ink); border: 1px solid var(--tv-border-strong); }
+.tv-btn-secondary:hover { background: var(--tv-page); }
+.tv-btn:disabled { background: #e6e9ee; color: #5d6470; border-color: #e6e9ee; cursor: not-allowed; }
+.tv-alt { width: 100%; }
+.tv-toc { max-width: 1100px; width: 100%; margin: 0 auto; padding: 12px 16px; border-bottom: 1px solid var(--tv-border); }
+.tv-toc-title { margin: 0 0 8px; font-size: 16px; font-weight: 600; }
+.tv-toc-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.tv-toc-item { font: inherit; width: 100%; text-align: left; min-height: 44px; padding: 8px 12px; border: 1px solid var(--tv-border); border-radius: 8px; background: var(--tv-canvas); color: var(--tv-ink); cursor: pointer; font-variant-numeric: tabular-nums; }
+.tv-toc-item[aria-current] { border-left: 3px solid var(--tv-accent); font-weight: 600; }
+.tv-bar { position: sticky; bottom: 0; background: var(--tv-canvas); border-top: 1px solid var(--tv-border); padding-bottom: env(safe-area-inset-bottom, 0px); }
+.tv-bar-inner { max-width: 1100px; margin: 0 auto; padding: 12px 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (min-width: 768px) {
+  .tv-actions { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+  .tv-title { font-size: 24px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tv-viewer * { transition: none !important; animation: none !important; }
+}

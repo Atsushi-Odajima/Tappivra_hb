@@ -1,0 +1,33 @@
+{
+  "product": "Tappivra",
+  "colors": {
+    "canvas": "#FFFFFF",
+    "page": "#F7F8FA",
+    "ink": "#15171B",
+    "muted": "#5D6470",
+    "border": "#DDE1E7",
+    "accent": "#2563EB",
+    "accentSoft": "#DFF3FC"
+  },
+  "spacing": [
+    4,
+    8,
+    12,
+    16,
+    24,
+    32,
+    48,
+    64
+  ],
+  "radius": {
+    "button": 8,
+    "card": 12,
+    "modal": 16
+  },
+  "layout": {
+    "topBar": 64,
+    "stepPanel": 216,
+    "propertyPanel": 280
+  },
+  "note": "03_brand_and_ui_spec.txtと整合する実装補助"
+}

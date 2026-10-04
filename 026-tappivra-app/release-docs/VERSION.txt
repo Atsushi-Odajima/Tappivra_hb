@@ -1,0 +1,2 @@
+Tappivra 0.1.0（開発版・販売前）
+ビルド情報は package:release 実行時に追記されます。

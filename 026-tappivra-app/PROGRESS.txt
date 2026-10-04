@@ -1,0 +1,20 @@
+Tappivra 進捗記録（2026-10-04、Claude Code / Linux x86_64 コンテナ）
+
+P0 完了：納品資料を ../briefs/026_Tappivra/ に無変更でコピー（checksums.sha256 で同一性確認）。
+   PLAN.txt / README.md / DEVELOPMENT.txt 作成。依存は exact pin、package-lock.json / Cargo.lock 生成。
+P1 完了：src/domain/{types,limits,schema,ids,rect,graph,model,preflight}.ts、src-tauri/src/store.rs。
+   試験：src/domain/domain.test.ts、src-tauri/src/store_tests.rs。
+P2 完了：src/media/{sniff,process,pipeline,hash}.ts、src/editor/{ImportDialog,StageEditor,Panels,StepList,Editor}.tsx。
+   試験：src/media/sniff.test.ts、src/editor/editor.test.tsx（自動保存・競合・失敗）、E2E T05/T06。
+P3 完了：src/viewer/{runtime.ts,standalone.ts,viewer.css}、build/viewerRuntimePlugin.ts。
+   試験：src/viewer/runtime.test.ts、tests/e2e/viewer.spec.ts（位置精度・file://・XSS・axe）。
+P4 完了：src/export/{publicDoc,html,packages,zip}.ts、ExportDialog.tsx。
+   試験：src/export/export.test.ts（ZIP攻撃・破損・将来版・公開スキーマ・復元・HTML脱出）。
+P5 完了（実機未検証）：src/pwa/*、build/pwaPlugin.ts、src-tauri/src/lib.rs（IPC・保存ダイアログ・単一インスタンス）。
+   試験：tests/e2e/pwa.spec.ts（Chromiumモバイル模擬）。iPhone/Android実機は未実施。
+P6 一部完了：axe（ライブラリー・エディター・書き出し・閲覧HTML・PWA）、負荷（30step/290hotspot、25件/500MiB）、
+   release-docs/ 説明書、THIRD_PARTY_NOTICES 生成。Windows実機・200%文字拡大の手動確認は未実施。
+P7 完了（インストーラーなし）：scripts/verify-release*.{mjs,ts}、scripts/package-release.mjs、
+   TEST_REPORT.txt、CODEX_HANDOFF.txt。NSIS生成・署名・PWA配備は未実施（Windows/販売者の工程）。
+
+残作業は CODEX_HANDOFF.txt「残課題」「販売前の残条件」を参照。

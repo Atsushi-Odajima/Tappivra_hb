@@ -1,0 +1,58 @@
+
+
+PASS  scripts                                              package.json scripts: all present
+PASS  lockfiles                                            package-lock.json / src-tauri/Cargo.lock
+PASS  pinned-deps                                          all npm deps pinned exactly
+PASS  brand:logo_horizontal.png                            public/brand と納品素材が同一bytes
+PASS  brand:logo_horizontal.svg                            public/brand と納品素材が同一bytes
+PASS  brand:logo_horizontal_dark.png                       public/brand と納品素材が同一bytes
+PASS  brand:logo_mark.png                                  public/brand と納品素材が同一bytes
+PASS  brand:logo_mark.svg                                  public/brand と納品素材が同一bytes
+PASS  brand:pwa_icon_192.png                               public/brand と納品素材が同一bytes
+PASS  brand:pwa_icon_512.png                               public/brand と納品素材が同一bytes
+PASS  brand:pwa_maskable_512.png                           public/brand と納品素材が同一bytes
+PASS  brand:apple_touch_icon.png                           public/brand と納品素材が同一bytes
+PASS  brand:favicon_32.png                                 public/brand と納品素材が同一bytes
+PASS  brand-used                                           UI参照: logo_horizontal.svg,favicon_32.png,apple_touch_icon.png / PWA manifest: pwa_icon_192.png,pwa_icon_512.png,pwa_maskable_512.png
+PASS  tauri-icons                                          src-tauri/icons（pwa_icon_512.pngから tauri icon で生成）
+GATE  asset:maskable                                       納品素材 pwa_maskable_512.png と pwa_icon_512.png が同一bytes。maskable専用の余白設計か販売者が目視確認すること
+PASS  samples-exist                                        samples/quickstart.{html,tappivra-demo.zip,tappivra-project.zip}
+PASS  html:no-private-notes                                quickstart.html に内部メモの識別文字列なし
+PASS  html:no-network                                      quickstart.html に外部URL・fetch・module import なし
+PASS  html:csp                                             CSP（hash・connect-src none等）
+PASS  html:scripts                                         <script>はデータ1つ＋固定ランタイム1つのみ
+PASS  html:size                                            577765 bytes <= 25MiB
+PASS  demo-zip:valid                                       5 steps, 5 images, sha256一致
+PASS  demo-zip:no-private-notes                            閲覧ZIPに内部メモなし
+PASS  demo-zip:entries                                     manifest.json,HOW_TO_OPEN.txt,media/7b4d8d95-185d-4851-9d74-ed802455655f.png,media/824adb33-467c-4646-bc2a-8d71942c3554.png,media/13c1bd00-6321-4823-b556-9a437caf423f.png,media/319ce088-bee8-4233-ae7c-d3a401c0b911.png,media/a469b13f-072a-447f-a291-edea73c5786c.png
+PASS  project-zip:valid                                    5 steps（復元時は新UUID）
+PASS  project-zip:rejected-by-viewer                       閲覧PWA形式としては拒否される
+PASS  build:editor                                         dist/（npm run build）
+PASS  build:viewer                                         dist-viewer/viewer（npm run build:viewer）
+PASS  network:dist/assets/index-BBHqsDnU.js                no analytics/telemetry/external URLs (docs/namespace URLs only)
+PASS  network:dist-viewer/viewer/assets/index-COZQ09pb.js  no analytics/telemetry/external URLs (docs/namespace URLs only)
+PASS  network:dist-viewer/viewer/sw.js                     no analytics/telemetry/external URLs (docs/namespace URLs only)
+PASS  pwa:manifest                                         {"name":"Tappivra Viewer","scope":"/viewer/","start_url":"/viewer/"}
+PASS  pwa:sw-shell-only                                    SWはGETのアプリシェルのみキャッシュ（サンプル以外の閲覧データは対象外）
+PASS  doc:はじめに.txt                                         release-docs/はじめに.txt
+PASS  doc:使い方.txt                                          release-docs/使い方.txt
+PASS  doc:スマホで見る.txt                                       release-docs/スマホで見る.txt
+PASS  doc:バックアップと削除.txt                                    release-docs/バックアップと削除.txt
+PASS  doc:対応環境と制限.txt                                      release-docs/対応環境と制限.txt
+PASS  doc:LICENSE.txt                                      release-docs/LICENSE.txt
+PASS  doc:THIRD_PARTY_NOTICES.txt                          release-docs/THIRD_PARTY_NOTICES.txt
+PASS  doc:VERSION.txt                                      release-docs/VERSION.txt
+PASS  doc:静的ビューアー配信手順.txt                                  release-docs/静的ビューアー配信手順.txt
+PASS  notices:npm                                          本番依存: @tauri-apps/api,fflate,react,react-dom,zod
+PASS  notices:fonts                                        書体の扱い（同梱なし・OSフォント）
+PASS  no-font-files                                        フォントファイルを同梱していない
+PASS  test-report                                          TEST_REPORT.txt
+GATE  installer                                            NSISインストーラー未生成（Windows 11 x64で npm run tauri build -- --bundles nsis が必要）
+GATE  code-signing                                         コード署名なし（未署名テスト版。SmartScreen警告の可能性。署名方針は販売者判断）
+GATE  pwa-url                                              閲覧PWAの公開URL未設定・未配備（iPhone正式導線は未完了）
+GATE  device-tests                                         Windows 11実機・iPhone/Android実機試験 未実施（TEST_REPORT.txt参照）
+GATE  trademark                                            商標・名称の法的確認 未実施
+GATE  license-legal                                        利用許諾文（LICENSE.txt）は案。販売者の法的確認が必要
+
+46 PASS / 0 FAIL / 7 人間確認ゲート
+販売可能判定：未（上記GATEが残っています）

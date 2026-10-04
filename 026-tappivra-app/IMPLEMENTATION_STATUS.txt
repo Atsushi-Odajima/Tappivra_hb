@@ -1,0 +1,40 @@
+Tappivra 実装状況・採用バージョン（2026-10-04）
+
+■ 採用バージョン（package-lock.json / src-tauri/Cargo.lock で固定）
+ npm 本番：react 19.3.0 / react-dom 19.3.0 / zod 4.6.5 / fflate 0.8.3 / @tauri-apps/api 2.12.1
+ npm 開発：vite 7.3.6 / @vitejs/plugin-react 5.2.0 / typescript 5.9.3 / vitest 4.1.11 / jsdom 26.1.0 /
+           @testing-library/react 16.3.3 / @testing-library/jest-dom 6.10.0 / @playwright/test 1.56.1 /
+           @axe-core/playwright 4.13.0（overrides: playwright-core 1.56.1）/ eslint 9.39.5 / typescript-eslint 8.71.0 /
+           eslint-plugin-react-hooks 5.2.0 / esbuild 0.25.12 / @tauri-apps/cli 2.12.1 / fake-indexeddb 6.2.5
+ Rust：tauri 2.12.1 / tauri-build 2 / tauri-plugin-dialog 2.8.1 / tauri-plugin-single-instance 2.5.2 /
+       rusqlite 0.37.0（bundled, libsqlite3-sys 0.35.0）/ sha2 0.10.9 / serde_json 1.0.151 / percent-encoding 2
+ ツール：Node v22.22.0、npm 10.9.4（lock更新は npm 11 を一時使用）、rustc 1.97.0
+ 選定メモ：npm最新メジャー（vite 8 / vitest 5 / TypeScript 7 / eslint 10）は本作業時点で検証実績が少ないため、
+           1つ前の安定系を採用。vitest 3系には中程度の脆弱性（GHSA-82fw-gwwq-j7x9）があり 4.1.11 に更新済み（npm audit 0件）。
+
+■ 要件と実装ファイル
+ 01§05 データモデル        src/domain/types.ts, schema.ts（Zod）, limits.ts
+ 01§05 SQLite              src-tauri/src/store.rs（projects/assets/exports/settings、FK ON、WAL、移行前コピー、未来版拒否）
+ 01§06A ライブラリー        src/editor/Library.tsx
+ 01§06B エディター          src/editor/Editor.tsx, StepList.tsx, StageEditor.tsx, Panels.tsx
+ 01§06C 取り込み・黒塗り    src/editor/ImportDialog.tsx, src/media/*
+ 01§06D プレビュー          src/editor/PreviewDialog.tsx（公開変換→共通ランタイム）
+ 01§06E 書き出し前チェック  src/domain/preflight.ts, src/editor/ExportDialog.tsx
+ 01§06F データとバックアップ src/editor/Library.tsx（DataDialog）
+ 01§06G 閲覧PWA            src/pwa/*, build/pwaPlugin.ts
+ 01§07 編集ルール          src/domain/model.ts（コマンド・Undo50・循環防止）, graph.ts
+ 01§08 閲覧ランタイム      src/viewer/runtime.ts, viewer.css, standalone.ts（IIFE）
+ 01§09 書き出し・ZIP       src/export/html.ts, packages.ts, publicDoc.ts, zip.ts
+ 01§10 PWA条件             src/pwa/ViewerApp.tsx, deviceStore.ts
+ 01§11 セキュリティ        src-tauri/src/lib.rs（限定IPC）, capabilities/default.json, tauri.conf.json（CSP）
+ 01§12 UI                  src/editor/editor.css（03仕様トークン）, public/brand/（納品素材を同一bytesで使用）
+ 01§14 scripts             package.json（dev/tauri/typecheck/lint/test/test:e2e/build:viewer/build/samples/notices/verify:release/package:release）
+ 01§15 配布物              scripts/package-release.mjs, release-docs/
+
+■ 完成／未完成／未検証
+ 完成（自動試験あり）：ドメイン検証、グラフ検査、Undo、画像形式判定・上限、焼き込み黒塗り、公開変換、
+   単独HTML（CSP・IIFE）、閲覧ZIP・編集ZIP・安全なZIP読込・復元、閲覧ランタイム、PWA（模擬環境）、
+   Rustストア（所有・revision・原子的書込）、Linuxネイティブでの起動・IPC保存・書き出し・単一インスタンス。
+ 未完成：Windows NSISインストーラー生成、コード署名、PWAの実配備、ライセンス本文のRustクレート全文同梱（一覧のみ）。
+ 未検証：Windows 11/WebView2実機、Edge/Firefox/Safari、iPhone/Android実機、200%文字拡大・スクリーンリーダー手動確認、
+   実ディスク不足・書込権限なしのネイティブ模擬、実IMEでのショートカット抑制。

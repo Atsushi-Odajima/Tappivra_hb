@@ -1,0 +1,145 @@
+{
+  "fixtureFormat": "tappivra-spec-sample",
+  "fixtureVersion": 1,
+  "product": "Tappivra",
+  "implementationStatus": "not_implemented",
+  "projectTitle": "新規案件の登録デモ",
+  "entryFixtureId": "step-01",
+  "sourceImageSize": [
+    1440,
+    900
+  ],
+  "note": "仕様テスト用資料。実アプリ形式ではない。Claude CodeがUUIDへ変換し、確認処理を通して実サンプルを生成する。",
+  "privateNotesTestSentinel": "DO_NOT_EXPORT_PRIVATE_NOTE_TAPPIVRA",
+  "steps": [
+    {
+      "fixtureId": "step-01",
+      "title": "一覧",
+      "image": "screen_01.png",
+      "kind": "screen",
+      "altText": "架空のサンプル業務画面：一覧",
+      "hotspots": [
+        {
+          "label": "新規作成を開く",
+          "target": "step-02",
+          "rectPx": [
+            1060,
+            120,
+            230,
+            56
+          ],
+          "rect": {
+            "x": 0.736111,
+            "y": 0.133333,
+            "w": 0.159722,
+            "h": 0.062222
+          }
+        }
+      ],
+      "sha256": "e6c25413aa564dfc6f3ecc9501518951206a221b9b8672be81b14249e1a763c6"
+    },
+    {
+      "fixtureId": "step-02",
+      "title": "新規作成",
+      "image": "screen_02.png",
+      "kind": "screen",
+      "altText": "架空のサンプル業務画面：新規作成",
+      "hotspots": [
+        {
+          "label": "入力例を表示",
+          "target": "step-03",
+          "rectPx": [
+            266,
+            600,
+            266,
+            56
+          ],
+          "rect": {
+            "x": 0.184722,
+            "y": 0.666667,
+            "w": 0.184722,
+            "h": 0.062222
+          }
+        },
+        {
+          "label": "保存済みの例を見る",
+          "target": "step-04",
+          "rectPx": [
+            562,
+            600,
+            326,
+            56
+          ],
+          "rect": {
+            "x": 0.390278,
+            "y": 0.666667,
+            "w": 0.226389,
+            "h": 0.062222
+          }
+        }
+      ],
+      "sha256": "5e6a8b8e88c45ef0eb969d615d19e2fd2509cc479aba6a1d886a55325ee599b4"
+    },
+    {
+      "fixtureId": "step-03",
+      "title": "入力例",
+      "image": "screen_03.png",
+      "kind": "screen",
+      "altText": "架空のサンプル業務画面：入力例",
+      "hotspots": [
+        {
+          "label": "保存結果を見る",
+          "target": "step-04",
+          "rectPx": [
+            266,
+            600,
+            266,
+            56
+          ],
+          "rect": {
+            "x": 0.184722,
+            "y": 0.666667,
+            "w": 0.184722,
+            "h": 0.062222
+          }
+        }
+      ],
+      "sha256": "b7c1f681b79ecf37c174ce3a45a54b356ee90bab115ca3335b76d8e708ede81d"
+    },
+    {
+      "fixtureId": "step-04",
+      "title": "保存完了",
+      "image": "screen_04.png",
+      "kind": "screen",
+      "altText": "架空のサンプル業務画面：保存完了",
+      "hotspots": [
+        {
+          "label": "説明を終える",
+          "target": "step-05",
+          "rectPx": [
+            266,
+            608,
+            330,
+            56
+          ],
+          "rect": {
+            "x": 0.184722,
+            "y": 0.675556,
+            "w": 0.229167,
+            "h": 0.062222
+          }
+        }
+      ],
+      "sha256": "a9a837c82cab5ff05b29e4360531428ec59dfef0bfd194b518840c3176966116"
+    },
+    {
+      "fixtureId": "step-05",
+      "title": "終了案内",
+      "image": "screen_05.png",
+      "kind": "finish",
+      "altText": "架空のサンプル業務画面：終了案内",
+      "hotspots": [],
+      "sha256": "7b8ce62a5a8682934f084bd72c917524b252774455675aff63e15f09d1843a0c"
+    }
+  ]
+}
